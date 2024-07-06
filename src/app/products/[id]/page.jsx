@@ -1,50 +1,50 @@
+// app/products/[id]/page.js
 "use client";
-import React, { useEffect, useState } from 'react';
-export default function page({params}) {
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-    const [products, setProducts] = useState([]);
+const ProductPage = () => {
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        const fetchProducts = async () => {
-          try {
-            const response = await fetch('/api/products');
-            if (response.ok) {
-              const productsData = await response.json();
-              setProducts(productsData);
-            } else {
-              console.error('Failed to fetch products');
+        const fetchProduct = async () => {
+            try {
+              console.log(id);
+                const response = await fetch(`/api/products/${id}`);
+                if (response.ok) {
+                    const productData = await response.json();
+                    setProduct(productData);
+                } else {
+                    console.error('Failed to fetch product');
+                }
+            } catch (error) {
+                console.error('Failed to fetch product:', error);
+            } finally {
+                setLoading(false);
             }
-          } catch (error) {
-            console.error('Failed to fetch products:', error);
-          }
         };
-    
-        fetchProducts();
-      }, []);
 
-    
-  return (
-    <div><div className="container mx-auto px-4 mt-16 mb-16">
-    <div className="bg-white shadow-md rounded-lg p-4">
-      <img
-        src={product.productImage}
-        alt={product.name}
-        className="w-full h-auto object-cover rounded-t-lg"
-      />
-      <div className="p-4">
-        <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-        <p className="mb-4">{product.description}</p>
-        <p className="mb-4">Brand: {product.brand}</p>
-        <p className="mb-4">Fragrance Notes: {product.fragranceNotes.join(', ')}</p>
-        <div className="flex items-center space-x-4">
-          {product.sizes.map((size, index) => (
-            <div key={index}>
-              <p>{size.volume} ml - Rs {size.price}</p>
-              <p>Stock: {size.stock}</p>
-            </div>
-          ))}
+        fetchProduct();
+    }, [id]);
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
+    if (!product) {
+        return <p>Product not found</p>;
+    }
+
+    return (
+        <div>
+            <h1 className='text-3xl font-bold mb-4'>{product.name}</h1>
+            <p>{product.description}</p>
+            <p>Price: ${product.price}</p>
+            {/* Add more product details as needed */}
         </div>
-      </div>
-    </div>
-  </div></div>
-  )
-}
+    );
+};
+
+export default ProductPage;
