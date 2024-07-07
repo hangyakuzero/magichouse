@@ -10,11 +10,7 @@ const Card = ({ product }) => {
           <div className="card card-compact bg-base-100 w-96 shadow-xl relative z-10 p-4 rounded-2xl">
           
             <figure>
-              <img
-                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-                alt="Shoes"
-                className="rounded-t-xl"
-              />
+            <img src={product.productImage} alt={product.name} className="rounded-xl" />
             </figure>
             <div className="card-body">
               <h2 className="card-title">{product.name}</h2>
