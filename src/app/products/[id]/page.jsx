@@ -60,7 +60,7 @@ const ProductPage = () => {
                             <button
                                 key={index}
                                 onClick={() => handleSizeChange(size)}
-                                className={`px-4 py-2 rounded-lg shadow-md transition-all duration-300 ${selectedSize === size ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+                                className={`px-4 py-2 rounded-lg shadow-md transition-all duration-300 ${selectedSize === size ? 'bg-green-500 text-white' : 'bg-gray-200 hover:bg-green-300'}`}
                             >
                                 {size.volume} ml
                             </button>
@@ -69,9 +69,11 @@ const ProductPage = () => {
                     {selectedSize && (
                         <div className="mt-6">
                             <p className="text-lg font-semibold">Selected Volume: <span className="font-normal">{selectedSize.volume} ml</span></p>
-                            <p className="text-lg font-semibold">Price: <span className="font-normal">${selectedSize.price}</span></p>
+                            <p className="text-lg font-semibold">Price: <span className="font-normal">Rs.{selectedSize.price}</span></p>
                             <p className="text-lg font-semibold">Stock: <span className="font-normal">{selectedSize.stock}</span></p>
+                            <button className="btn btn-accent my-6">Add to cart</button>
                         </div>
+                        
                     )}
                 </div>
             </div>
