@@ -1,4 +1,33 @@
 import mongoose, { Schema } from "mongoose";
+const OrderItemSchema = new mongoose.Schema(
+
+{
+  productId:{
+ type: mongoose.Schema.Types.ObjectId,
+ ref:"Product",
+ required: true,
+  },
+  quantity:{
+ type: Number,
+ required: true,
+  },
+  volume:{
+type: Number,
+required: true,
+  },
+
+price:{
+  type: Number,
+  required:true,
+
+  }
+
+},{timestamps:true}
+
+
+);
+
+
 const orderSchema = new mongoose.Schema(
   {
     orderPrice: {
@@ -8,6 +37,12 @@ const orderSchema = new mongoose.Schema(
     customer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    orderItems :{
+    type:[OrderItemSchema ],
+    required: true,
+
     },
 
     address: {
@@ -23,4 +58,4 @@ const orderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-export const Order = mongoose.model("Order", orderSchema);
+export const Order =mongoose.models.Order|| mongoose.model("Order", orderSchema);

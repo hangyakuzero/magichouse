@@ -1,13 +1,14 @@
-// app/products/[id]/page.js
 "use client";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useCart } from "@/context/CartContext"; // Adjust path as per your project structure
 
 const ProductPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -40,6 +41,20 @@ const ProductPage = () => {
 
   const handleSizeChange = (size) => {
     setSelectedSize(size);
+  };
+
+  const handleAddToCart = () => {
+    if (selectedSize) {
+      const productToAdd = {
+        _id: product._id,
+        name: product.name,
+        size: selectedSize.volume,
+        price: selectedSize.price,
+        stock: selectedSize.stock,
+        productImage: product.productImage,
+      };
+      addToCart(productToAdd);
+    }
   };
 
   return (
@@ -99,7 +114,9 @@ const ProductPage = () => {
               <p className="text-lg font-semibold">
                 Stock: <span className="font-normal">{selectedSize.stock}</span>
               </p>
-              <button className="btn btn-accent my-6">Add to cart</button>
+              <button onClick={handleAddToCart} className="btn btn-accent my-6">
+                Add to cart
+              </button>
             </div>
           )}
         </div>

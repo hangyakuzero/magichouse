@@ -1,110 +1,85 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
+const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
+      const res = await fetch('/api/login', {  // Replace with your login API endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (res.error) {
-        setError("Invalid Credentials");
-        return;
-      }
+      const data = await res.json();
 
-      router.replace("landingPage");
+      if (res.ok) {
+        // Login successful
+        router.push('/products');  // Redirect to a protected page after login
+      } else {
+        // Handle error
+        setError(data.message || "An error occurred. Please try again.");
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error during login:", error);
+      setError("An error occurred. Please try again.");
     }
   };
 
   return (
-    <section className=" dark:bg-black">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="flex items-center mb-6 text-4xl font-semibold text-gray-900 dark:text-white">
-          {/*<img className="w-8 h-8 mr-2" src="" alt="logo" />*/}
-          MagicHouse
-        </div>
-        <div className="w-full bg-white rounded-lg shadow dark:border-4 md:mt-0 sm:max-w-md xl:p-0 dark:bg-black dark:border-green-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Sign in to your account
-            </h1>
-            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-              <div>
-                <label
-                  for="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your email
-                </label>
-                <input
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="bg-neutral border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="magichouse@gmail.com"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  for="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Password
-                </label>
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
-                />
-              </div>
-              {error && (
-                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                  {error}
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              >
-                Sign in
-              </button>
-              <p className="text-sm font-light text-white dark:text-white">
-                Don’t have an account yet?{" "}
-                <Link
-                  href="/registerForm"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Sign up
-                </Link>
-              </p>
-            </form>
+    <section className="flex items-center justify-center min-h-screen bg-gray-200">
+      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Sign in to your account</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-gray-700 text-sm font-medium mb-2">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
-        </div>
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-gray-700 text-sm font-medium mb-2">Password</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-300"
+          >
+            Sign in
+          </button>
+        </form>
+        <p className="text-center text-gray-600 mt-4">
+          Don't have an account?{" "}
+          <a href="/registerform" className="text-blue-600 hover:underline">
+            Sign up
+          </a>
+        </p>
       </div>
     </section>
   );
-}
+};
+
+export default LoginForm;

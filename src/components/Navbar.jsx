@@ -1,7 +1,7 @@
 "use client";
+
 import React from "react";
-import { signOut } from "next-auth/react";
-import { useCart } from "@/context/CartContext"; 
+import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -9,6 +9,25 @@ export default function Navbar() {
 
   const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
   const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("/api/logout", {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        window.location.href = "/"; // Redirect to login page after logout
+      } else {
+        const data = await res.json();
+        console.error(data.message);
+        // Handle error in UI
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+      // Handle error in UI
+    }
+  };
 
   return (
     <div className="navbar bg-green-500">
@@ -29,7 +48,7 @@ export default function Navbar() {
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
             <div className="indicator">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="https://www.shutterstock.com/image-vector/deadpool-icon-art-design-danger-600nw-2291818891.jpg"
                 className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -51,9 +70,11 @@ export default function Navbar() {
           >
             <div className="card-body">
               <span className="font-bold text-lg">{totalItems} Items</span>
-              <span className="text-info">Subtotal: ${totalAmount}</span>
+              <span className="text-info">Subtotal: Rs.{totalAmount}</span>
               <div className="card-actions">
-                <button className="btn btn-primary btn-block"> < Link href="/Cart">View cart</Link></button>
+                <button className="btn btn-primary btn-block">
+                  <Link href="/Cart">View cart</Link>
+                </button>
               </div>
             </div>
           </div>
@@ -67,7 +88,7 @@ export default function Navbar() {
             <div className="w-10 rounded-full">
               <img
                 alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                src="https://www.shutterstock.com/image-vector/deadpool-icon-art-design-danger-600nw-2291818891.jpg"
               />
             </div>
           </div>
@@ -81,10 +102,10 @@ export default function Navbar() {
               </a>
             </li>
             <li>
-              <a>Settings</a>
+              <a href="/orders"> View Orders</a>
             </li>
             <li>
-              <button onClick={() => signOut()}>Logout</button>
+              <button onClick={handleLogout}>Logout</button>
             </li>
           </ul>
         </div>

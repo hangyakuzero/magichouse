@@ -1,10 +1,10 @@
 import React from 'react'
+import CheckoutPage from '@/components/Checkout'
 
 export default function page() {
   return (
     <div>
-      <h1>
-        <strong>Nothing to see here lol.</strong></h1>
+<CheckoutPage/>
     </div>
   )
 }

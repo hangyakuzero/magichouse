@@ -2,14 +2,11 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import LoginPage from "@/components/LoginForm";
-import RegisterForm from "@/components/RegisterForm";
 import { AuthProvider } from "./provider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
-import LoginForm from "@/components/LoginForm";
-import { redirect } from "next/navigation";
 import { CartProvider } from "@/context/CartContext"; // Adjust path as per your project structure
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,21 +17,18 @@ export const metadata = {
 
 const RootLayout = async ({ children }) => {
   const session = await getServerSession(authOptions);
+ // Use the custom hook to get userId
 
   return (
     <html lang="en">
       <body>
         <AuthProvider>
           <CartProvider>
-            {session ? (
-              <div className="flex flex-col bg-base-200 min-h-screen">
-                <Navbar />
-                <main className="flex-grow bg-base-200 p-4">{children}</main>
-                <Footer />
-              </div>
-            ) : (
+            <div className="flex flex-col bg-base-200 min-h-screen">
+              <Navbar />
               <main className="flex-grow bg-base-200 p-4">{children}</main>
-            )}
+              <Footer />
+            </div>
           </CartProvider>
         </AuthProvider>
       </body>

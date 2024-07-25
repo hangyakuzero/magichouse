@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { BackgroundGradient } from './ui/background-gradient';
 
 const Card = ({ product }) => {
   return (

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { BackgroundGradient } from "@/components/ui/background-gradient";
+
 import Card from "@/components/card";
 
 export default function Page() {

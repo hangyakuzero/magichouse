@@ -6,7 +6,8 @@ import dbConnect from "@/lib/dbConnect";
 export async function POST(req) {
   await dbConnect();
   try {
-    const { username, email, password } = await req.json();
+    const reqbody = await req.json();
+    const { username, email, password } = reqbody;
     const hashedPassword = await bcrypt.hash(password, 10);
     await User.create({ username, email, password: hashedPassword });
     return NextResponse.json({ message: "User registered." }, { status: 201 });
