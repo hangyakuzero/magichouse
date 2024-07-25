@@ -1,6 +1,6 @@
 import React from "react";
 import Hero from "@/components/Hero";
-import LoginForm from "@/components/loginForm";
+import LoginForm from "@/components/LoginForm";
 import { getServerSession } from "next-auth";
 
 import { redirect } from "next/navigation";
