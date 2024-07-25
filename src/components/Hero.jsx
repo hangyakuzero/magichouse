@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 import React from "react";
 
@@ -15,7 +16,7 @@ export default function Hero() {
             a id nisi.
           </p>
           <button className="btn btn-primary">
-            <a href="/products">Get Started</a>
+            <Link href="/products">Get Started</Link>
           </button>
         </div>
       </div>
