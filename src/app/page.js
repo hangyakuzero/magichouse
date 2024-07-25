@@ -1,11 +1,21 @@
-import React from 'react'
-import Hero from '@/components/Hero'
+import React from "react";
+import Hero from "@/components/Hero";
+import LoginForm from "@/components/loginForm";
+import { getServerSession } from "next-auth";
 
-export default function page() {
+import { redirect } from "next/navigation";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+
+export default async function page() {
+  const session = await getServerSession(authOptions);
+
+  if (session) redirect("/landingPage");
   return (
-    <div className='bg-base-200' >
-
-<Hero/>
- </div>
-  )
+    <>
+      <LoginForm />
+      {/*<div className="bg-base-200">
+        <Hero />
+      </div>*/}
+    </>
+  );
 }
